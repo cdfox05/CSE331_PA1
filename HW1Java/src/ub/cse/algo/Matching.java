@@ -23,6 +23,7 @@ public class Matching extends ArrayList<Marriage> implements Comparable<Matching
         this.addAll(marriages);
     }
 
+
     @Override
     public boolean equals(Object obj) {
         Matching other = (Matching) obj;

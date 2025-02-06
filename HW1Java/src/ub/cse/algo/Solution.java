@@ -1,5 +1,7 @@
 package ub.cse.algo;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -45,7 +47,7 @@ public class Solution {
             /* The code below just calls the allPermutations function, and thenjust prints all permutattions*/
             /* To compare your code's output with the sample outpout you need to comment out the part about printing the permutations*/
 
-            ArrayList<ArrayList<Integer>> listOfAllPermutations = new ArrayList<>();
+            /*ArrayList<ArrayList<Integer>> listOfAllPermutations = new ArrayList<>();
             listOfAllPermutations = allPermutations(numberOfMenAndWomen);
 
             System.out.println("----------------------------");
@@ -54,9 +56,56 @@ public class Solution {
             System.out.println("----------------------------");
             for(ArrayList<Integer> set : listOfAllPermutations){
                 System.out.println(set);
+            }*/
+
+        System.out.println("Preference List");
+        System.out.println("----------------------------");
+        for (int i = 1; i <= numberOfMenAndWomen; i++) {
+            if (women.containsKey(i) && men.containsKey(i))
+            {
+                System.out.println("Woman " + (i) + " Preferences: " + women.get(i));
+                System.out.println("Man " + (i) + " Preferences: " + men.get(i));
             }
-            System.out.println("----------------------------");
+        }
+        System.out.println("----------------------------");
             /*allPermutations call done*/
+
+        HashMap<Integer, Marriage> marriages = new HashMap<>();
+
+        for (int i = 1; i <= numberOfMenAndWomen; i++) {
+            for (int j = 0; j < numberOfMenAndWomen; j++) {
+
+                if (!marriages.containsKey(women.get(i).get(j)))
+                {
+                    marriages.put(women.get(i).get(j), new Marriage(men.get(women.get(i).get(j)).get(j), i));
+                } else {
+
+                    int currMan = women.get(i).get(j);
+                    int currWoman = marriages.get(currMan).woman;
+                    ArrayList<Integer> mPref = men.get(women.get(i).get(j));
+
+                    int currWomanRank = 0;
+                    int newWomanRank = 0;
+                    for (int w = 1; w < mPref.size(); w++)
+                    {
+                        if (mPref.get(w) == currWoman) {
+                            currWomanRank = w;
+                        }
+                        else if (mPref.get(w) == i) {
+                            newWomanRank = w;
+                        }
+                    }
+
+                    if (newWomanRank > currWomanRank)
+                        marriages.get(currMan).woman = i;
+                }
+            }
+        }
+
+        for (int i = 1; i < numberOfMenAndWomen; i++) {
+            System.out.println("Man: " + marriages.get(i).man + " Woman: " + marriages.get(i).woman);
+        }
+
 
         return stableMatchings;
     }
@@ -80,7 +129,7 @@ public class Solution {
      * This method generates all of the permutations of the input for you.
      * Implements Jeap's algorithm.
      * @param set A complete matching set, not necesarrily stable
-     * @param listOfpermut Current of of all opermutations that have been generated so far. This would be updated by ref
+     * @param listOfPermut Current of of all opermutations that have been generated so far. This would be updated by ref
      * @param length length of the set
      */
     private void permutate(ArrayList<Integer> set, ArrayList<ArrayList<Integer>> listOfPermut, int length){
