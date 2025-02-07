@@ -58,13 +58,15 @@ public class Solution {
 
         System.out.println("Preference List");
         System.out.println("----------------------------");
-        for (int i = 1; i <= numberOfMenAndWomen; i++) {
+        /*for (int i = 1; i <= numberOfMenAndWomen; i++) {
             if (women.containsKey(i) && men.containsKey(i))
             {
                 System.out.println("Woman " + (i) + " Preferences: " + women.get(i));
                 System.out.println("Man " + (i) + " Preferences: " + men.get(i));
             }
         }
+
+         */
         System.out.println("\nAll Permutations");
             /*allPermutations call done*/
 
