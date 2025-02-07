@@ -91,7 +91,7 @@ public class Solution {
                 int currMan = set.get(i).man;
                 int currWoman = set.get(i).woman;
 
-                for (Marriage match : set) { //checks current set to see if it has an unstable match before doing other processes
+                /*for (Marriage match : set) { //checks current set to see if it has an unstable match before doing other processes
                     if (unstableMarriage.contains(match)) {
                         System.out.println(set.get(i));
                         unstable.add(set);
@@ -99,6 +99,9 @@ public class Solution {
                         break;
                     }
                 }
+
+                 */
+
 
                 for (Integer pref : men.get(currMan)) { //O(n)
                     if (breakCheck)
@@ -113,7 +116,7 @@ public class Solution {
                         //System.out.println("man pref: " + newWoman);
 
 
-                        ///THIS LOGIC IS FALSE\\\
+
                         int m = set.get(newWoman - 1).man;
                         //System.out.println("woman pref: " + m);
                         ArrayList<Integer> wPref = women.get(newWoman);
