@@ -72,7 +72,7 @@ public class Solution {
 
         ArrayList<ArrayList<Marriage>> unstable = new ArrayList<>();
 
-        for (int x = 0; x < listOfAllPermutations.size(); x++) {
+        for (int x = 0; x < listOfAllPermutations.size(); x++) { // O(n!)
             ArrayList<Marriage> set = new ArrayList<>();
             for (int y = 1; y <= numberOfMenAndWomen; y++ ) {
                 set.add(new Marriage(listOfAllPermutations.get(x).get(y-1), y));
@@ -84,13 +84,13 @@ public class Solution {
             //Go through set and see if there is any woman higher on a man's preference list that also has
             //that man higher on their preference list.
             //if there is then classify this set as unstable
-            for (int i = 0; i < set.size(); i++) {
+            for (int i = 0; i < set.size(); i++) { //O(n)
                 if (breakCheck)
                     break;
                 int currMan = set.get(i).man;
                 int currWoman = set.get(i).woman;
 
-                for (Integer pref : men.get(currMan)) {
+                for (Integer pref : men.get(currMan)) { //O(n)
                     if (breakCheck)
                         break;
 
@@ -106,18 +106,16 @@ public class Solution {
                         ///THIS LOGIC IS FALSE\\\
                         int m = set.get(newWoman - 1).man;
                         //System.out.println("woman pref: " + m);
-                        int mNum = -1;
+                        //int mNum = -1;
                         ArrayList<Integer> wPref = women.get(newWoman);
-                        for (int w = 0; w < wPref.size(); w++) {
-                            if (wPref.get(w) == m) {
-                                mNum = w;
-                            } else if (wPref.get(w) == currMan) {
-                                if (mNum == -1) {
-                                    //System.out.println("mNum: " + mNum);
-                                    unstable.add(set);
-                                    breakCheck = true;
-                                    break;
-                                }
+                        for (Integer integer : wPref) { //O(n)
+                            if (integer == m) {
+                                break;
+                            } else if (integer == currMan) {
+                                //System.out.println("mNum: " + mNum);
+                                unstable.add(set);
+                                breakCheck = true;
+                                break;
                             }
                         }
 
