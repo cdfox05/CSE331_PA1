@@ -67,10 +67,11 @@ public class Solution {
                 System.out.println("Man " + (i) + " Preferences: " + men.get(i));
             }
         }
-        System.out.println("----------------------------");
+        System.out.println("\nAll Permutations");
             /*allPermutations call done*/
 
         ArrayList<ArrayList<Marriage>> marriages = new ArrayList<>();
+        ArrayList<ArrayList<Marriage>> unstable = new ArrayList<>();
 
         for (int i = 0; i < listOfAllPermutations.size(); i++) {
             marriages.add(new ArrayList<>());
@@ -78,6 +79,7 @@ public class Solution {
                 marriages.get(i).add(new Marriage(listOfAllPermutations.get(i).get(j-1), j));
             }
         }
+
 
         for (ArrayList<Marriage> set : marriages) {
             System.out.println(set);
@@ -96,9 +98,14 @@ public class Solution {
                 for (Integer pref : men.get(currMan)) {
                     if (breakCheck)
                         break;
+
+                    //System.out.println("Current Man: " + currMan);
+                    //System.out.println("Current Woman: " + currWoman);
+
                     if (!pref.equals(currWoman))
                     {
                         int newWoman = pref;
+                        //System.out.println("man pref: " + newWoman);
 
                         for (int j = 0; j < set.size(); j++) {
                             if (breakCheck)
@@ -107,15 +114,16 @@ public class Solution {
                                 if (set.get(j).woman == newWoman) {
                                     ///THIS LOGIC IS FALSE\\\
                                     int m = set.get(j).man;
+                                    //System.out.println("woman pref: " + m);
                                     int mNum = -1;
                                     ArrayList<Integer> wPref = women.get(newWoman);
                                     for (int w = 0; w < wPref.size(); w++) {
                                         if (wPref.get(w) == m) {
                                             mNum = w;
                                         } else if (wPref.get(w) == currMan) {
-                                            if (mNum != -1 && mNum < w) {
-                                                System.out.println("mNum: " + mNum);
-                                                stableMatchings.add(new Matching(set));
+                                            if (mNum == -1) {
+                                                //System.out.println("mNum: " + mNum);
+                                                unstable.add(set);
                                                 breakCheck = true;
                                                 break;
                                             }
@@ -125,16 +133,22 @@ public class Solution {
                             }
                         }
                     }
+                    else
+                    {
+                        break;
+                    }
                 }
 
 
             }
 
-
+            if (!unstable.isEmpty() && !unstable.contains(set)) {
+                stableMatchings.add(new Matching(set));
+            }
 
         }
 
-
+        System.out.println("----------------------------");
 
 
 
