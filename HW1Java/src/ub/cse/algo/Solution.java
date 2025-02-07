@@ -100,31 +100,26 @@ public class Solution {
                         int newWoman = pref;
                         //System.out.println("man pref: " + newWoman);
 
-                        for (int j = 0; j < set.size(); j++) {
-                            if (breakCheck)
-                                break;
-                            if (j != i) {
-                                if (set.get(j).woman == newWoman) {
-                                    ///THIS LOGIC IS FALSE\\\
-                                    int m = set.get(j).man;
-                                    //System.out.println("woman pref: " + m);
-                                    int mNum = -1;
-                                    ArrayList<Integer> wPref = women.get(newWoman);
-                                    for (int w = 0; w < wPref.size(); w++) {
-                                        if (wPref.get(w) == m) {
-                                            mNum = w;
-                                        } else if (wPref.get(w) == currMan) {
-                                            if (mNum == -1) {
-                                                //System.out.println("mNum: " + mNum);
-                                                unstable.add(set);
-                                                breakCheck = true;
-                                                break;
-                                            }
-                                        }
-                                    }
+
+                        ///THIS LOGIC IS FALSE\\\
+                        int m = set.get(newWoman - 1).man;
+                        //System.out.println("woman pref: " + m);
+                        int mNum = -1;
+                        ArrayList<Integer> wPref = women.get(newWoman);
+                        for (int w = 0; w < wPref.size(); w++) {
+                            if (wPref.get(w) == m) {
+                                mNum = w;
+                            } else if (wPref.get(w) == currMan) {
+                                if (mNum == -1) {
+                                    //System.out.println("mNum: " + mNum);
+                                    unstable.add(set);
+                                    breakCheck = true;
+                                    break;
                                 }
                             }
                         }
+
+
                     }
                     else
                     {
