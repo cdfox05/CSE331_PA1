@@ -71,13 +71,14 @@ public class Solution {
             /*allPermutations call done*/
 
         ArrayList<ArrayList<Marriage>> unstable = new ArrayList<>();
+        ArrayList<Marriage> unstableMarriage = new ArrayList<>();
 
         for (int x = 0; x < listOfAllPermutations.size(); x++) { // O(n!)
             ArrayList<Marriage> set = new ArrayList<>();
             for (int y = 1; y <= numberOfMenAndWomen; y++ ) {
                 set.add(new Marriage(listOfAllPermutations.get(x).get(y-1), y));
             }
-            //System.out.println(set);
+            System.out.println(set);
 
             boolean breakCheck = false;
 
@@ -89,6 +90,15 @@ public class Solution {
                     break;
                 int currMan = set.get(i).man;
                 int currWoman = set.get(i).woman;
+
+                for (Marriage match : set) { //checks current set to see if it has an unstable match before doing other processes
+                    if (unstableMarriage.contains(match)) {
+                        System.out.println(set.get(i));
+                        unstable.add(set);
+                        breakCheck = true;
+                        break;
+                    }
+                }
 
                 for (Integer pref : men.get(currMan)) { //O(n)
                     if (breakCheck)
@@ -113,6 +123,7 @@ public class Solution {
                             } else if (integer == currMan) {
                                 //System.out.println("mNum: " + mNum);
                                 unstable.add(set);
+                                unstableMarriage.add(set.get(i));
                                 breakCheck = true;
                                 break;
                             }
