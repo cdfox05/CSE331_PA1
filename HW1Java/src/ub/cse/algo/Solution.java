@@ -1,7 +1,5 @@
 package ub.cse.algo;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -144,6 +142,7 @@ public class Solution {
 
             if (!unstable.isEmpty() && !unstable.contains(set)) {
                 stableMatchings.add(new Matching(set));
+                System.out.println(set);
             }
 
         }
