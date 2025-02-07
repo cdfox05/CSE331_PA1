@@ -68,18 +68,80 @@ public class Solution {
         System.out.println("\nAll Permutations");
             /*allPermutations call done*/
 
-        ArrayList<ArrayList<Marriage>> marriages = new ArrayList<>();
         ArrayList<ArrayList<Marriage>> unstable = new ArrayList<>();
 
-        for (int i = 0; i < listOfAllPermutations.size(); i++) {
-            marriages.add(new ArrayList<>());
-            for (int j = 1; j <= numberOfMenAndWomen; j++ ) {
-                marriages.get(i).add(new Marriage(listOfAllPermutations.get(i).get(j-1), j));
+        for (int x = 0; x < listOfAllPermutations.size(); x++) {
+            ArrayList<Marriage> set = new ArrayList<>();
+            for (int y = 1; y <= numberOfMenAndWomen; y++ ) {
+                set.add(new Marriage(listOfAllPermutations.get(x).get(y-1), y));
+            }
+            //System.out.println(set);
+
+            boolean breakCheck = false;
+
+            //Go through set and see if there is any woman higher on a man's preference list that also has
+            //that man higher on their preference list.
+            //if there is then classify this set as unstable
+            for (int i = 0; i < set.size(); i++) {
+                if (breakCheck)
+                    break;
+                int currMan = set.get(i).man;
+                int currWoman = set.get(i).woman;
+
+                for (Integer pref : men.get(currMan)) {
+                    if (breakCheck)
+                        break;
+
+                    //System.out.println("Current Man: " + currMan);
+                    //System.out.println("Current Woman: " + currWoman);
+
+                    if (!pref.equals(currWoman))
+                    {
+                        int newWoman = pref;
+                        //System.out.println("man pref: " + newWoman);
+
+                        for (int j = 0; j < set.size(); j++) {
+                            if (breakCheck)
+                                break;
+                            if (j != i) {
+                                if (set.get(j).woman == newWoman) {
+                                    ///THIS LOGIC IS FALSE\\\
+                                    int m = set.get(j).man;
+                                    //System.out.println("woman pref: " + m);
+                                    int mNum = -1;
+                                    ArrayList<Integer> wPref = women.get(newWoman);
+                                    for (int w = 0; w < wPref.size(); w++) {
+                                        if (wPref.get(w) == m) {
+                                            mNum = w;
+                                        } else if (wPref.get(w) == currMan) {
+                                            if (mNum == -1) {
+                                                //System.out.println("mNum: " + mNum);
+                                                unstable.add(set);
+                                                breakCheck = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+
+            }
+
+            if (!unstable.isEmpty() && !unstable.contains(set)) {
+                stableMatchings.add(new Matching(set));
             }
         }
 
 
-        for (ArrayList<Marriage> set : marriages) {
+        /*for (ArrayList<Marriage> set : marriages) {
             System.out.println(set);
 
             boolean breakCheck = false;
@@ -142,12 +204,13 @@ public class Solution {
 
             if (!unstable.isEmpty() && !unstable.contains(set)) {
                 stableMatchings.add(new Matching(set));
-                System.out.println(set);
             }
 
         }
 
         System.out.println("----------------------------");
+
+         */
 
 
 
