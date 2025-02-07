@@ -106,7 +106,6 @@ public class Solution {
                         ///THIS LOGIC IS FALSE\\\
                         int m = set.get(newWoman - 1).man;
                         //System.out.println("woman pref: " + m);
-                        //int mNum = -1;
                         ArrayList<Integer> wPref = women.get(newWoman);
                         for (Integer integer : wPref) { //O(n)
                             if (integer == m) {
