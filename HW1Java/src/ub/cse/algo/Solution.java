@@ -47,7 +47,7 @@ public class Solution {
             /* The code below just calls the allPermutations function, and thenjust prints all permutattions*/
             /* To compare your code's output with the sample outpout you need to comment out the part about printing the permutations*/
 
-            /*ArrayList<ArrayList<Integer>> listOfAllPermutations = new ArrayList<>();
+            ArrayList<ArrayList<Integer>> listOfAllPermutations = new ArrayList<>();
             listOfAllPermutations = allPermutations(numberOfMenAndWomen);
 
             System.out.println("----------------------------");
@@ -56,7 +56,7 @@ public class Solution {
             System.out.println("----------------------------");
             for(ArrayList<Integer> set : listOfAllPermutations){
                 System.out.println(set);
-            }*/
+            }
 
         System.out.println("Preference List");
         System.out.println("----------------------------");
@@ -70,41 +70,74 @@ public class Solution {
         System.out.println("----------------------------");
             /*allPermutations call done*/
 
-        HashMap<Integer, Marriage> marriages = new HashMap<>();
+        ArrayList<ArrayList<Marriage>> marriages = new ArrayList<>();
 
-        for (int i = 1; i <= numberOfMenAndWomen; i++) {
-            for (int j = 0; j < numberOfMenAndWomen; j++) {
-
-                if (!marriages.containsKey(women.get(i).get(j)))
-                {
-                    marriages.put(women.get(i).get(j), new Marriage(men.get(women.get(i).get(j)).get(j), i));
-                } else {
-
-                    int currMan = women.get(i).get(j);
-                    int currWoman = marriages.get(currMan).woman;
-                    ArrayList<Integer> mPref = men.get(women.get(i).get(j));
-
-                    int currWomanRank = 0;
-                    int newWomanRank = 0;
-                    for (int w = 1; w < mPref.size(); w++)
-                    {
-                        if (mPref.get(w) == currWoman) {
-                            currWomanRank = w;
-                        }
-                        else if (mPref.get(w) == i) {
-                            newWomanRank = w;
-                        }
-                    }
-
-                    if (newWomanRank > currWomanRank)
-                        marriages.get(currMan).woman = i;
-                }
+        for (int i = 0; i < listOfAllPermutations.size(); i++) {
+            marriages.add(new ArrayList<>());
+            for (int j = 1; j <= numberOfMenAndWomen; j++ ) {
+                marriages.get(i).add(new Marriage(listOfAllPermutations.get(i).get(j-1), j));
             }
         }
 
-        for (int i = 1; i < numberOfMenAndWomen; i++) {
-            System.out.println("Man: " + marriages.get(i).man + " Woman: " + marriages.get(i).woman);
+        for (ArrayList<Marriage> set : marriages) {
+            System.out.println(set);
+
+            boolean breakCheck = false;
+
+            //Go through set and see if there is any woman higher on a man's preference list that also has
+            //that man higher on their preference list.
+            //if there is then classify this set as unstable
+            for (int i = 0; i < set.size(); i++) {
+                if (breakCheck)
+                    break;
+                int currMan = set.get(i).man;
+                int currWoman = set.get(i).woman;
+
+                for (Integer pref : men.get(currMan)) {
+                    if (breakCheck)
+                        break;
+                    if (!pref.equals(currWoman))
+                    {
+                        int newWoman = pref;
+
+                        for (int j = 0; j < set.size(); j++) {
+                            if (breakCheck)
+                                break;
+                            if (j != i) {
+                                if (set.get(j).woman == newWoman) {
+                                    ///THIS LOGIC IS FALSE\\\
+                                    int m = set.get(j).man;
+                                    int mNum = -1;
+                                    ArrayList<Integer> wPref = women.get(newWoman);
+                                    for (int w = 0; w < wPref.size(); w++) {
+                                        if (wPref.get(w) == m) {
+                                            mNum = w;
+                                        } else if (wPref.get(w) == currMan) {
+                                            if (mNum != -1 && mNum < w) {
+                                                System.out.println("mNum: " + mNum);
+                                                stableMatchings.add(new Matching(set));
+                                                breakCheck = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+
+
         }
+
+
+
+
+
 
 
         return stableMatchings;
