@@ -50,13 +50,11 @@ public class Solution {
         listOfAllPermutations = allPermutations(numberOfMenAndWomen);
 
 
-        HashSet<HashMap<Integer, Marriage>> unstable = new HashSet<>();
+        HashSet<ArrayList<Marriage>> unstable = new HashSet<>();
         for (int x = 0; x < listOfAllPermutations.size(); x++) { // O(n!)
-            HashMap<Integer, Marriage> set = new HashMap<>();
-            ArrayList<Marriage> sets = new ArrayList<>();
+            ArrayList<Marriage> set = new ArrayList<>();
             for (int y = 1; y <= numberOfMenAndWomen; y++ ) {
-                set.put(y-1,new Marriage(listOfAllPermutations.get(x).get(y-1), y));
-                sets.add(new Marriage(listOfAllPermutations.get(x).get(y-1), y));
+                set.add(new Marriage(listOfAllPermutations.get(x).get(y-1), y));
             }
 
             boolean breakCheck = false;
@@ -69,10 +67,12 @@ public class Solution {
                 int currMan = set.get(i).man;
                 int currWoman = set.get(i).woman;
 
-                if (men.get(currMan).get(0) == currWoman)
+                ArrayList<Integer> prefList = men.get(currMan);
+
+                if (prefList.get(0) == currWoman)
                     continue;
 
-                for (Integer pref : men.get(currMan)) { //O(n)
+                for (Integer pref : prefList) { //O(n)
 
                     //System.out.println("Current Man: " + currMan);
                     //System.out.println("Current Woman: " + currWoman);
@@ -111,7 +111,7 @@ public class Solution {
             }
 
             if (!unstable.contains(set)) {
-                stableMatchings.add(new Matching(sets));
+                stableMatchings.add(new Matching(set));
             }
         }
         return stableMatchings;
