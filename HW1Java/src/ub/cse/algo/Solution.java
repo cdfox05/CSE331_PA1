@@ -2,6 +2,7 @@ package ub.cse.algo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * For use in CSE 331 HW1.
@@ -48,39 +49,13 @@ public class Solution {
             ArrayList<ArrayList<Integer>> listOfAllPermutations = new ArrayList<>();
             listOfAllPermutations = allPermutations(numberOfMenAndWomen);
 
-            System.out.println("----------------------------");
-            System.out.println("Printing all possible permutations of [1,2,...n] for n ="+numberOfMenAndWomen);
-            System.out.println("Total number of permutation generated ="+listOfAllPermutations.size());
-            System.out.println("----------------------------");
-            /*for(ArrayList<Integer> set : listOfAllPermutations){
-                System.out.println(set);
-            }
 
-             */
-
-        System.out.println("Preference List");
-        System.out.println("----------------------------");
-        /*for (int i = 1; i <= numberOfMenAndWomen; i++) {
-            if (women.containsKey(i) && men.containsKey(i))
-            {
-                System.out.println("Woman " + (i) + " Preferences: " + women.get(i));
-                System.out.println("Man " + (i) + " Preferences: " + men.get(i));
-            }
-        }
-
-         */
-        System.out.println("\nAll Permutations");
-            /*allPermutations call done*/
-
-        HashMap<Integer, ArrayList<Marriage>> unstable = new HashMap<>();
+        HashSet<ArrayList<Marriage>> unstable = new HashSet<>();
         for (int x = 0; x < listOfAllPermutations.size(); x++) { // O(n!)
             ArrayList<Marriage> set = new ArrayList<>();
             for (int y = 1; y <= numberOfMenAndWomen; y++ ) {
                 set.add(new Marriage(listOfAllPermutations.get(x).get(y-1), y));
             }
-            System.out.println(set);
-
-
 
             boolean breakCheck = false;
 
@@ -99,8 +74,6 @@ public class Solution {
                     continue;
 
                 for (Integer pref : men.get(currMan)) { //O(n)
-                    if (breakCheck)
-                        break;
 
                     //System.out.println("Current Man: " + currMan);
                     //System.out.println("Current Woman: " + currWoman);
@@ -120,7 +93,6 @@ public class Solution {
                                 break;
                             } else if (integer == currMan) {
                                 //System.out.println("mNum: " + mNum);
-                                unstable.put(x,set);
                                 breakCheck = true;
                                 break;
                             }
@@ -133,91 +105,16 @@ public class Solution {
                         break;
                     }
                 }
-
-
-            }
-
-            if (!unstable.isEmpty() && unstable.get(x) != set) {
-                stableMatchings.add(new Matching(set));
-            }
-        }
-
-
-        /*for (ArrayList<Marriage> set : marriages) {
-            System.out.println(set);
-
-            boolean breakCheck = false;
-
-            //Go through set and see if there is any woman higher on a man's preference list that also has
-            //that man higher on their preference list.
-            //if there is then classify this set as unstable
-            for (int i = 0; i < set.size(); i++) {
-                if (breakCheck)
+                if (breakCheck) {
+                    unstable.add(set);
                     break;
-                int currMan = set.get(i).man;
-                int currWoman = set.get(i).woman;
-
-                for (Integer pref : men.get(currMan)) {
-                    if (breakCheck)
-                        break;
-
-                    //System.out.println("Current Man: " + currMan);
-                    //System.out.println("Current Woman: " + currWoman);
-
-                    if (!pref.equals(currWoman))
-                    {
-                        int newWoman = pref;
-                        //System.out.println("man pref: " + newWoman);
-
-                        for (int j = 0; j < set.size(); j++) {
-                            if (breakCheck)
-                                break;
-                            if (j != i) {
-                                if (set.get(j).woman == newWoman) {
-                                    ///THIS LOGIC IS FALSE\\\
-                                    int m = set.get(j).man;
-                                    //System.out.println("woman pref: " + m);
-                                    int mNum = -1;
-                                    ArrayList<Integer> wPref = women.get(newWoman);
-                                    for (int w = 0; w < wPref.size(); w++) {
-                                        if (wPref.get(w) == m) {
-                                            mNum = w;
-                                        } else if (wPref.get(w) == currMan) {
-                                            if (mNum == -1) {
-                                                //System.out.println("mNum: " + mNum);
-                                                unstable.add(set);
-                                                breakCheck = true;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
                 }
-
-
             }
 
-            if (!unstable.isEmpty() && !unstable.contains(set)) {
+            if (!unstable.contains(set)) {
                 stableMatchings.add(new Matching(set));
             }
-
         }
-
-        System.out.println("----------------------------");
-
-         */
-
-
-
-
-
         return stableMatchings;
     }
 
