@@ -46,15 +46,17 @@ public class Solution {
             /* The code below just calls the allPermutations function, and thenjust prints all permutattions*/
             /* To compare your code's output with the sample outpout you need to comment out the part about printing the permutations*/
 
-            ArrayList<ArrayList<Integer>> listOfAllPermutations = new ArrayList<>();
-            listOfAllPermutations = allPermutations(numberOfMenAndWomen);
+        ArrayList<ArrayList<Integer>> listOfAllPermutations = new ArrayList<>();
+        listOfAllPermutations = allPermutations(numberOfMenAndWomen);
 
 
-        HashSet<ArrayList<Marriage>> unstable = new HashSet<>();
+        HashSet<HashMap<Integer, Marriage>> unstable = new HashSet<>();
         for (int x = 0; x < listOfAllPermutations.size(); x++) { // O(n!)
-            ArrayList<Marriage> set = new ArrayList<>();
+            HashMap<Integer, Marriage> set = new HashMap<>();
+            ArrayList<Marriage> sets = new ArrayList<>();
             for (int y = 1; y <= numberOfMenAndWomen; y++ ) {
-                set.add(new Marriage(listOfAllPermutations.get(x).get(y-1), y));
+                set.put(y-1,new Marriage(listOfAllPermutations.get(x).get(y-1), y));
+                sets.add(new Marriage(listOfAllPermutations.get(x).get(y-1), y));
             }
 
             boolean breakCheck = false;
@@ -63,9 +65,6 @@ public class Solution {
             //that man higher on their preference list.
             //if there is then classify this set as unstable
             for (int i = 0; i < set.size(); i++) { //O(n)
-                if (breakCheck)
-                    break;
-
 
                 int currMan = set.get(i).man;
                 int currWoman = set.get(i).woman;
@@ -112,7 +111,7 @@ public class Solution {
             }
 
             if (!unstable.contains(set)) {
-                stableMatchings.add(new Matching(set));
+                stableMatchings.add(new Matching(sets));
             }
         }
         return stableMatchings;
