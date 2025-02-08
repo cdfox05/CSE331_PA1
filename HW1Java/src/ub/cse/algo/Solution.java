@@ -52,9 +52,11 @@ public class Solution {
             System.out.println("Printing all possible permutations of [1,2,...n] for n ="+numberOfMenAndWomen);
             System.out.println("Total number of permutation generated ="+listOfAllPermutations.size());
             System.out.println("----------------------------");
-            for(ArrayList<Integer> set : listOfAllPermutations){
+            /*for(ArrayList<Integer> set : listOfAllPermutations){
                 System.out.println(set);
             }
+
+             */
 
         System.out.println("Preference List");
         System.out.println("----------------------------");
@@ -70,15 +72,15 @@ public class Solution {
         System.out.println("\nAll Permutations");
             /*allPermutations call done*/
 
-        ArrayList<ArrayList<Marriage>> unstable = new ArrayList<>();
-        ArrayList<Marriage> unstableMarriage = new ArrayList<>();
-
+        HashMap<Integer, ArrayList<Marriage>> unstable = new HashMap<>();
         for (int x = 0; x < listOfAllPermutations.size(); x++) { // O(n!)
             ArrayList<Marriage> set = new ArrayList<>();
             for (int y = 1; y <= numberOfMenAndWomen; y++ ) {
                 set.add(new Marriage(listOfAllPermutations.get(x).get(y-1), y));
             }
             System.out.println(set);
+
+
 
             boolean breakCheck = false;
 
@@ -88,20 +90,13 @@ public class Solution {
             for (int i = 0; i < set.size(); i++) { //O(n)
                 if (breakCheck)
                     break;
+
+
                 int currMan = set.get(i).man;
                 int currWoman = set.get(i).woman;
 
-                /*for (Marriage match : set) { //checks current set to see if it has an unstable match before doing other processes
-                    if (unstableMarriage.contains(match)) {
-                        System.out.println(set.get(i));
-                        unstable.add(set);
-                        breakCheck = true;
-                        break;
-                    }
-                }
-
-                 */
-
+                if (men.get(currMan).get(0) == currWoman)
+                    continue;
 
                 for (Integer pref : men.get(currMan)) { //O(n)
                     if (breakCheck)
@@ -125,8 +120,7 @@ public class Solution {
                                 break;
                             } else if (integer == currMan) {
                                 //System.out.println("mNum: " + mNum);
-                                unstable.add(set);
-                                unstableMarriage.add(set.get(i));
+                                unstable.put(x,set);
                                 breakCheck = true;
                                 break;
                             }
@@ -143,7 +137,7 @@ public class Solution {
 
             }
 
-            if (!unstable.isEmpty() && !unstable.contains(set)) {
+            if (!unstable.isEmpty() && unstable.get(x) != set) {
                 stableMatchings.add(new Matching(set));
             }
         }
