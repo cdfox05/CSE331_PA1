@@ -51,9 +51,12 @@ public class Solution {
 
 
         HashSet<ArrayList<Marriage>> unstable = new HashSet<>();
+        ArrayList<Marriage> set = new ArrayList<>();
         for (int x = 0; x < listOfAllPermutations.size(); x++) { // O(n!)
-            ArrayList<Marriage> set = new ArrayList<>();
-            for (int y = 1; y <= numberOfMenAndWomen; y++ ) {
+
+            set.clear();
+
+            for (int y = 1; y <= numberOfMenAndWomen; y++) {
                 set.add(new Marriage(listOfAllPermutations.get(x).get(y-1), y));
             }
 
@@ -63,7 +66,10 @@ public class Solution {
             //that man higher on their preference list.
             //if there is then classify this set as unstable
             for (int i = 0; i < set.size(); i++) { //O(n)
-
+                if (breakCheck) {
+                    unstable.add(set);
+                    break;
+                }
                 int currMan = set.get(i).man;
                 int currWoman = set.get(i).woman;
 
@@ -73,40 +79,37 @@ public class Solution {
                     continue;
 
                 for (Integer pref : prefList) { //O(n)
-
-                    //System.out.println("Current Man: " + currMan);
-                    //System.out.println("Current Woman: " + currWoman);
-
-                    if (!pref.equals(currWoman))
-                    {
+                    if (pref.equals(currWoman)) {
+                        break;
+                    } else {
+                        if (breakCheck) {
+                            unstable.add(set);
+                            break;
+                        }
                         int newWoman = pref;
-                        //System.out.println("man pref: " + newWoman);
-
-
-
                         int m = set.get(newWoman - 1).man;
-                        //System.out.println("woman pref: " + m);
+
                         ArrayList<Integer> wPref = women.get(newWoman);
                         for (Integer integer : wPref) { //O(n)
+                            if (breakCheck) {
+                                unstable.add(set);
+                                break;
+                            }
                             if (integer == m) {
                                 break;
                             } else if (integer == currMan) {
-                                //System.out.println("mNum: " + mNum);
                                 breakCheck = true;
                                 break;
                             }
+
                         }
 
 
                     }
-                    else
-                    {
+                    if (breakCheck) {
+                        unstable.add(set);
                         break;
                     }
-                }
-                if (breakCheck) {
-                    unstable.add(set);
-                    break;
                 }
             }
 
