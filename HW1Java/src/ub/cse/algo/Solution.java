@@ -51,15 +51,16 @@ public class Solution {
 
 
         HashSet<ArrayList<Marriage>> unstable = new HashSet<>();
-        ArrayList<Marriage> set = new ArrayList<>();
+        ArrayList<Marriage> set = new ArrayList<>(numberOfMenAndWomen);
+        for (int i = 0; i < numberOfMenAndWomen; i++) {
+            set.add(null);
+        }
         for (int x = 0; x < listOfAllPermutations.size(); x++) { // O(n!)
 
-            set.clear();
 
             for (int y = 1; y <= numberOfMenAndWomen; y++) {
-                set.add(new Marriage(listOfAllPermutations.get(x).get(y-1), y));
+                set.set(y-1,new Marriage(listOfAllPermutations.get(x).get(y-1), y));
             }
-
             boolean breakCheck = false;
 
             //Go through set and see if there is any woman higher on a man's preference list that also has
